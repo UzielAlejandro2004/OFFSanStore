@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carrito de Compras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdf6f0 0%, #ffe8f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
+            color: white;
+            padding: 1.5em;
+            text-align: center;
+            font-size: clamp(1.5em, 4vw, 2em);
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(252,108,133,0.3);
+        }
+
+        nav {
+            background: linear-gradient(90deg, #1f2a40, #2d3e5f, #1f2a40);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.5em 0;
+        }
+
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        nav a {
+            color: #fdf6f0;
+            padding: 1em 1.2em;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: clamp(0.75em, 2vw, 0.9em);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #fc6c85;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+        nav a:hover {
+            color: #ff8fa1;
+            background: rgba(252,108,133,0.1);
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 2em auto;
+            padding: clamp(1em, 3vw, 2em);
+        }
+
+        h2 {
+            color: #fc6c85;
+            font-size: clamp(2em, 5vw, 2.5em);
+            margin-bottom: 1em;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .carrito-vacio {
+            text-align: center;
+            padding: clamp(3em, 6vw, 5em) 2em;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .carrito-vacio .icon {
+            font-size: clamp(4em, 10vw, 6em);
+            margin-bottom: 0.5em;
+            opacity: 0.6;
+        }
+
+        .carrito-vacio h3 {
+            color: #666;
+            margin-bottom: 1em;
+            font-size: clamp(1.3em, 3vw, 1.8em);
+        }
+
+        .carrito-vacio p {
+            color: #999;
+            margin-bottom: 2em;
+            font-size: clamp(1em, 2vw, 1.1em);
+        }
+
+        .carrito-vacio a {
+            display: inline-block;
+            padding: 1em 2.5em;
+            background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: clamp(1em, 2vw, 1.1em);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(252,108,133,0.3);
+        }
+
+        .carrito-vacio a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(252,108,133,0.5);
+        }
+
+        .carrito-contenido {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2em;
+        }
+
+        .carrito-items {
+            background: white;
+            border-radius: 20px;
+            padding: 2em;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .carrito-item {
+            display: grid;
+            grid-template-columns: 130px 1fr auto;
+            gap: 1.5em;
+            padding: 1.5em;
+            border-bottom: 2px solid #f5f5f5;
+            align-items: center;
+        }
+
+        .carrito-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .item-info h3 {
+            color: #1f2a40;
+            margin-bottom: 0.5em;
+            font-size: clamp(1.1em, 2.5vw, 1.3em);
+        }
+
+        .item-info p {
+            color: #666;
+            margin-bottom: 0.5em;
+            font-size: clamp(0.9em, 2vw, 1em);
+        }
+
+        .item-precio {
+            font-size: clamp(1.2em, 2.5vw, 1.4em);
+            color: #fc6c85;
+            font-weight: bold;
+        }
+
+        .item-actions {
+            text-align: right;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            margin-bottom: 1em;
+            justify-content: flex-end;
+        }
+
+        .quantity-control button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #fc6c85;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.3em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(252,108,133,0.3);
+        }
+
+        .quantity-control button:hover {
+            background: #ff5678;
+            transform: scale(1.1);
+        }
+
+        .quantity-control span {
+            font-weight: bold;
+            min-width: 35px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .btn-eliminar {
+            padding: 0.7em 1.3em;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(0.85em, 2vw, 0.95em);
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(231,76,60,0.3);
+        }
+
+        .btn-eliminar:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231,76,60,0.5);
+        }
+
+        .resumen {
+            background: white;
+            border-radius: 20px;
+            padding: 2em;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .resumen h3 {
+            color: #1f2a40;
+            font-size: clamp(1.5em, 3vw, 1.8em);
+            margin-bottom: 1em;
+            padding-bottom: 0.5em;
+            border-bottom: 3px solid #fc6c85;
+        }
+
+        .resumen-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1em;
+            font-size: clamp(1em, 2vw, 1.1em);
+            color: #555;
+        }
+
+        .resumen-item span:last-child {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .resumen-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(1.4em, 3vw, 1.6em);
+            font-weight: bold;
+            color: #fc6c85;
+            margin-top: 1.5em;
+            padding-top: 1.5em;
+            border-top: 3px solid #f0f0f0;
+        }
+
+        .btn-comprar {
+            width: 100%;
+            padding: 1.3em;
+            background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: clamp(1.1em, 2.5vw, 1.2em);
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1.5em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(252,108,133,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-comprar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(252,108,133,0.6);
+        }
+
+        .btn-vaciar {
+            width: 100%;
+            padding: 1em;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: clamp(0.95em, 2vw, 1em);
+            cursor: pointer;
+            margin-top: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(149,165,166,0.3);
+        }
+
+        .btn-vaciar:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .btn-seguir {
+            width: 100%;
+            padding: 1em;
+            background: white;
+            color: #fc6c85;
+            border: 2px solid #fc6c85;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: clamp(0.95em, 2vw, 1em);
+            cursor: pointer;
+            margin-top: 1em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-seguir:hover {
+            background: #fc6c85;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: clamp(1.5em, 3vw, 2em) 1em;
+            background: linear-gradient(135deg, #1f2a40 0%, #2d3e5f 100%);
+            color: #fdf6f0;
+            margin-top: clamp(3em, 5vw, 4em);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .footer-creators {
+            margin-top: 1em;
+            font-style: italic;
+            color: #ff8fa1;
+            font-size: clamp(0.85em, 2vw, 0.95em);
+        }
+
+        @media (max-width: 1024px) {
+            .carrito-contenido {
+                grid-template-columns: 1fr;
+            }
+            
+            .resumen {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8em;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .carrito-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1em;
+            }
+
+            .item-img {
+                margin: 0 auto;
+            }
+
+            .item-actions {
+                text-align: center;
+            }
+
+            .quantity-control {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .item-img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>🛒 Carrito de Compras</header>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">Inicio</a>
+            <a href="valores.html">Valores</a>
+            <a href="ropa_mujer.html">Ropa Mujer</a>
+            <a href="ropa_hombre.html">Ropa Hombre</a>
+            <a href="accesorios_hombre.html">Accesorios Hombre</a>
+            <a href="accesorios_varios.html">Accesorios Variados</a>
+            <a href="pago_envio.html">Pago y Envíos</a>
+        </div>
+    </nav>
+
+    <main>
+        <h2>Tu Carrito de Compras</h2>
+        <div id="carritoContainer"></div>
+    </main>
+
+    <footer>
+        © 2025 Tienda En Línea. Todos los derechos reservados.
+        <div class="footer-creators">
+            Creado por: Uziel Alejandro Hernandez Gonzalez y Juan Luis Reyes Marquez
+        </div>
+    </footer>
+
+    <script>
+        function renderCarrito() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const container = document.getElementById('carritoContainer');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="carrito-vacio">
+                        <div class="icon">🛒</div>
+                        <h3>Tu carrito está vacío</h3>
+                        <p>¡Explora nuestra colección y encuentra algo que te encante!</p>
+                        <a href="index.html">🛍️ Ir a Comprar</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.precio * item.quantity), 0);
+            const envio = subtotal >= 1000 ? 0 : 99;
+            const total = subtotal + envio;
+
+            container.innerHTML = `
+                <div class="carrito-contenido">
+                    <div class="carrito-items">
+                        ${cart.map(item => `
+                            <div class="carrito-item">
+                                <img src="${item.img}" alt="${item.nombre}" class="item-img">
+                                <div class="item-info">
+                                    <h3>${item.nombre}</h3>
+                                    <p>${item.descripcion}</p>
+                                    <div class="item-precio">$${item.precio.toFixed(2)} MXN</div>
+                                </div>
+                                <div class="item-actions">
+                                    <div class="quantity-control">
+                                        <button onclick="cambiarCantidad(${item.id}, -1)" title="Disminuir">−</button>
+                                        <span>${item.quantity}</span>
+                                        <button onclick="cambiarCantidad(${item.id}, 1)" title="Aumentar">+</button>
+                                    </div>
+                                    <button class="btn-eliminar" onclick="eliminarItem(${item.id})">
+                                        🗑️ Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="resumen">
+                        <h3>📋 Resumen del Pedido</h3>
+                        <div class="resumen-item">
+                            <span>Subtotal (${cart.reduce((sum, item) => sum + item.quantity, 0)} artículos):</span>
+                            <span>$${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span>Envío:</span>
+                            <span>${envio === 0 ? 'GRATIS 🎉' : '$' + envio.toFixed(2)}</span>
+                        </div>
+                        ${envio > 0 ? `
+                        <div class="resumen-item" style="font-size: 0.9em; color: #fc6c85;">
+                            <span>💡 Tip:</span>
+                            <span>Envío gratis en compras mayores a $1,000</span>
+                        </div>
+                        ` : ''}
+                        <div class="resumen-total">
+                            <span>Total:</span>
+                            <span>$${total.toFixed(2)} MXN</span>
+                        </div>
+                        <button class="btn-comprar" onclick="finalizarCompra()">
+                            💳 Finalizar Compra
+                        </button>
+                        <a href="index.html" class="btn-seguir">
+                            ← Seguir Comprando
+                        </a>
+                        <button class="btn-vaciar" onclick="vaciarCarrito()">
+                            🗑️ Vaciar Carrito
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cambiarCantidad(id, cambio) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const item = cart.find(i => i.id === id);
+            
+            if (item) {
+                item.quantity += cambio;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCarrito();
+        }
+
+        function eliminarItem(id) {
+            if (confirm('¿Estás seguro de eliminar este producto del carrito?')) {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart = cart.filter(i => i.id !== id);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCarrito();
+            }
+        }
+
+        function vaciarCarrito() {
+            if (confirm('¿Estás seguro de vaciar todo el carrito?')) {
+                localStorage.removeItem('cart');
+                renderCarrito();
+            }
+        }
+
+        function finalizarCompra() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            alert('¡Gracias por tu compra! Serás redirigido a los métodos de pago...');
+            window.location.href = 'pago_envio.html';
+        }
+
+        renderCarrito();
+    </script>
+</body>
+</html>
