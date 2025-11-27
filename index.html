@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ropa para Hombre</title>
+    <title>Tienda en Línea - Moda y Estilo</title>
     <style>
         * {
             margin: 0;
@@ -15,19 +15,67 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #fdf6f0 0%, #ffe8f0 100%);
             color: #333;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* Header con animación */
         header {
             background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
             color: white;
-            padding: 1.5em;
+            padding: 2em 1em;
             text-align: center;
-            font-size: clamp(1.5em, 4vw, 2em);
-            font-weight: bold;
             box-shadow: 0 5px 20px rgba(252,108,133,0.3);
+            position: relative;
+            overflow: hidden;
         }
 
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        header h1 {
+            font-size: clamp(1.5em, 5vw, 2.8em);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin-top: 0.5em;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navegación sticky mejorada */
         nav {
             background: linear-gradient(90deg, #1f2a40, #2d3e5f, #1f2a40);
             display: flex;
@@ -73,11 +121,11 @@
             transform: translateX(-50%);
         }
 
-        nav a:hover::after {
+        nav a:hover::after, nav a.active::after {
             width: 80%;
         }
 
-        nav a:hover {
+        nav a:hover, nav a.active {
             color: #ff8fa1;
             background: rgba(252,108,133,0.1);
         }
@@ -111,103 +159,230 @@
             font-size: 0.75em;
             font-weight: bold;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        main {
-            max-width: 1400px;
-            margin: 2em auto;
-            padding: clamp(1em, 3vw, 2em);
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        h2 {
-            color: #fc6c85;
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(252,108,133,0.08) 0%, rgba(255,143,161,0.08) 100%);
+            padding: clamp(2em, 8vw, 5em) clamp(1em, 5vw, 3em);
             text-align: center;
-            font-size: clamp(1.8em, 4vw, 2.5em);
-            margin-bottom: 1em;
-            font-weight: 700;
-        }
-
-        .productos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
-            gap: clamp(1.5em, 3vw, 2em);
-        }
-
-        .producto {
-            background: white;
-            border-radius: 15px;
+            margin: clamp(1.5em, 4vw, 3em) auto;
+            max-width: 1400px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(252,108,133,0.15);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero::before {
+            content: '✨';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: rotate 10s linear infinite;
+        }
+
+        .hero::after {
+            content: '💎';
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: rotate 8s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h2 {
+            color: #fc6c85;
+            font-size: clamp(1.8em, 5vw, 3em);
+            margin-bottom: 0.5em;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: clamp(1em, 3vw, 1.4em);
+            color: #555;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sección de Categorías */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: clamp(1.5em, 3vw, 2.5em);
+            max-width: 1400px;
+            margin: clamp(2em, 5vw, 4em) auto;
+            padding: 0 clamp(1em, 3vw, 2em);
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            position: relative;
         }
 
-        .producto:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(252,108,133,0.3);
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(252,108,133,0.1) 0%, rgba(255,143,161,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
         }
 
-        .producto img {
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(252,108,133,0.25);
+        }
+
+        .category-card img {
             width: 100%;
-            height: 280px;
+            height: 220px;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .producto:hover img {
+        .category-card:hover img {
             transform: scale(1.1);
         }
 
-        .producto-info {
-            padding: 1.5em;
+        .category-info {
+            padding: clamp(1.2em, 3vw, 2em);
+            text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
-        .producto-info h3 {
+        .category-info h3 {
             color: #1f2a40;
-            font-size: clamp(1.1em, 2.5vw, 1.3em);
+            font-size: clamp(1.2em, 3vw, 1.6em);
             margin-bottom: 0.5em;
             font-weight: 700;
         }
 
-        .producto-info p {
+        .category-info p {
             color: #666;
-            margin-bottom: 1em;
-            line-height: 1.5;
+            margin-bottom: 1.2em;
             font-size: clamp(0.9em, 2vw, 1em);
+            line-height: 1.5;
         }
 
-        .precio {
-            font-size: clamp(1.3em, 3vw, 1.5em);
-            color: #fc6c85;
-            font-weight: bold;
-            margin-bottom: 1em;
-        }
-
-        .btn-agregar {
-            width: 100%;
-            padding: 1em;
+        .category-btn {
+            display: inline-block;
+            padding: clamp(0.7em, 2vw, 1em) clamp(1.5em, 4vw, 2.5em);
             background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
             color: white;
-            border: none;
-            border-radius: 8px;
+            text-decoration: none;
+            border-radius: 30px;
             font-weight: 600;
             font-size: clamp(0.9em, 2vw, 1em);
-            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(252,108,133,0.3);
+            box-shadow: 0 5px 20px rgba(252,108,133,0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-agregar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(252,108,133,0.5);
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
         }
 
+        .category-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .category-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(252,108,133,0.5);
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+            gap: 2em;
+            max-width: 1400px;
+            margin: clamp(3em, 6vw, 5em) auto;
+            padding: 0 clamp(1em, 3vw, 2em);
+        }
+
+        .feature {
+            background: white;
+            padding: 2em;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(252,108,133,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+
+        .feature h3 {
+            color: #1f2a40;
+            margin-bottom: 0.5em;
+            font-size: 1.3em;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
         footer {
             text-align: center;
-            padding: clamp(1.5em, 3vw, 2em) 1em;
+            padding: clamp(1.5em, 4vw, 2.5em) 1em;
             background: linear-gradient(135deg, #1f2a40 0%, #2d3e5f 100%);
             color: #fdf6f0;
-            margin-top: clamp(3em, 5vw, 4em);
+            margin-top: clamp(3em, 6vw, 5em);
             box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
         }
 
@@ -218,27 +393,12 @@
             font-size: clamp(0.85em, 2vw, 0.95em);
         }
 
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: #4caf50;
-            color: white;
-            padding: 1em 2em;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-            font-weight: 600;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
+        /* Media Queries */
         @media (max-width: 768px) {
+            nav {
+                padding: 0;
+            }
+
             .nav-container {
                 flex-direction: column;
                 width: 100%;
@@ -256,27 +416,28 @@
                 text-align: center;
             }
 
-            .notification {
-                right: 50%;
-                transform: translateX(50%);
-                width: 90%;
-                text-align: center;
+            .hero::before,
+            .hero::after {
+                font-size: 2em;
             }
         }
 
         @media (max-width: 480px) {
-            .productos {
+            .categories {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header>👔 Ropa para Hombre</header>
-    
+    <header>
+        <h1>✨ Tienda En Línea ✨</h1>
+        <p>Moda y Accesorios de Calidad</p>
+    </header>
+
     <nav>
         <div class="nav-container">
-            <a href="index.html">Inicio</a>
+            <a href="index.html" class="active">Inicio</a>
             <a href="valores.html">Valores</a>
             <a href="ropa_mujer.html">Ropa Mujer</a>
             <a href="ropa_hombre.html">Ropa Hombre</a>
@@ -289,11 +450,72 @@
             </div>
         </div>
     </nav>
+    
+    <div class="hero">
+        <h2>Bienvenidos a Tu Tienda Favorita</h2>
+        <p>Descubre la mejor selección de ropa y accesorios para mujer y hombre. Calidad garantizada, precios competitivos y envíos rápidos. ¡Tu estilo comienza aquí!</p>
+    </div>
 
-    <main>
-        <h2>Colección para Hombre</h2>
-        <div class="productos" id="productosContainer"></div>
-    </main>
+    <div class="categories">
+        <div class="category-card">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80" alt="Ropa Mujer">
+            <div class="category-info">
+                <h3>👗 Ropa para Mujer</h3>
+                <p>Vestidos, blusas, jeans y más</p>
+                <a href="ropa_mujer.html" class="category-btn">Ver Colección</a>
+            </div>
+        </div>
+
+        <div class="category-card">
+            <img src="https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?auto=format&fit=crop&w=400&q=80" alt="Ropa Hombre">
+            <div class="category-info">
+                <h3>👔 Ropa para Hombre</h3>
+                <p>Camisas, chaquetas, pantalones</p>
+                <a href="ropa_hombre.html" class="category-btn">Ver Colección</a>
+            </div>
+        </div>
+
+        <div class="category-card">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Accesorios Hombre">
+            <div class="category-info">
+                <h3>⌚ Accesorios Hombre</h3>
+                <p>Relojes, cinturones, billeteras</p>
+                <a href="accesorios_hombre.html" class="category-btn">Ver Accesorios</a>
+            </div>
+        </div>
+
+        <div class="category-card">
+            <img src="https://images.unsplash.com/photo-1556306535-0f09a537f0a3?auto=format&fit=crop&w=400&q=80" alt="Accesorios Varios">
+            <div class="category-info">
+                <h3>🎁 Accesorios Variados</h3>
+                <p>Bufandas, sombreros, guantes</p>
+                <a href="accesorios_varios.html" class="category-btn">Ver Accesorios</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <div class="feature-icon">🚚</div>
+            <h3>Envío Rápido</h3>
+            <p>Entregas en 3-7 días hábiles a todo México</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">💳</div>
+            <h3>Pago Seguro</h3>
+            <p>Múltiples métodos de pago con máxima seguridad</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">✨</div>
+            <h3>Calidad Premium</h3>
+            <p>Productos verificados y de la mejor calidad</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🎁</div>
+            <h3>Ofertas Exclusivas</h3>
+            <p>Descuentos y promociones especiales</p>
+        </div>
+    </div>
 
     <footer>
         © 2025 Tienda En Línea. Todos los derechos reservados.
@@ -302,73 +524,16 @@
         </div>
     </footer>
 
-    <div class="notification" id="notification">✅ ¡Producto agregado al carrito!</div>
-
     <script>
-        const productos = [
-            { id: 101, nombre: "Camisa Casual", descripcion: "Camisa de algodón para uso diario", precio: 549, img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
-            { id: 102, nombre: "Chaqueta de Cuero", descripcion: "Chaqueta elegante de cuero genuino", precio: 1299, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80" },
-            { id: 103, nombre: "Jeans Azul", descripcion: "Jeans clásicos de mezclilla", precio: 799, img: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=80" },
-            { id: 104, nombre: "Camisa Blanca", descripcion: "Camisa formal blanca", precio: 599, img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=400&q=80" },
-            { id: 105, nombre: "Suéter Gris", descripcion: "Suéter de lana para invierno", precio: 849, img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80" },
-            { id: 106, nombre: "Polo Deportivo", descripcion: "Polo cómodo para deporte", precio: 449, img: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?auto=format&fit=crop&w=400&q=80" },
-            { id: 107, nombre: "Pantalón de Vestir", descripcion: "Pantalón formal negro", precio: 749, img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=400&q=80" },
-            { id: 108, nombre: "Chamarra Bomber", descripcion: "Chamarra estilo aviador", precio: 1099, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=400&q=80" },
-            { id: 109, nombre: "Camiseta Básica", descripcion: "Camiseta de algodón negra", precio: 299, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" },
-            { id: 110, nombre: "Hoodie Gris", descripcion: "Sudadera con capucha", precio: 699, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80" },
-            { id: 111, nombre: "Shorts Deportivos", descripcion: "Shorts para gimnasio", precio: 399, img: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=400&q=80" },
-            { id: 112, nombre: "Blazer Azul Marino", descripcion: "Blazer formal elegante", precio: 1499, img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80" }
-        ];
-
-        function renderProductos() {
-            const container = document.getElementById('productosContainer');
-            container.innerHTML = productos.map(p => `
-                <div class="producto">
-                    <img src="${p.img}" alt="${p.nombre}">
-                    <div class="producto-info">
-                        <h3>${p.nombre}</h3>
-                        <p>${p.descripcion}</p>
-                        <div class="precio">$${p.precio.toFixed(2)} MXN</div>
-                        <button class="btn-agregar" onclick="agregarAlCarrito(${p.id})">
-                            Agregar al Carrito 🛒
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function agregarAlCarrito(id) {
-            const producto = productos.find(p => p.id === id);
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            const existing = cart.find(item => item.id === id);
-            if (existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({ ...producto, quantity: 1 });
-            }
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            showNotification();
-        }
-
+        // Actualizar contador del carrito
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const count = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = count;
         }
-
-        function showNotification() {
-            const notif = document.getElementById('notification');
-            notif.style.display = 'block';
-            setTimeout(() => {
-                notif.style.display = 'none';
-            }, 2000);
-        }
-
-        renderProductos();
         updateCartCount();
+
+        // Actualizar cada segundo por si se agrega desde otra página
         setInterval(updateCartCount, 1000);
     </script>
 </body>
