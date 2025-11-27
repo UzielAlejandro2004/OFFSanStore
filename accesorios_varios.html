@@ -5,118 +5,363 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Accesorios Variados</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            background: #fdf6f0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdf6f0 0%, #ffe8f0 100%);
             color: #333;
+            min-height: 100vh;
         }
+
         header {
-            background-color: #fc6c85;
+            background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
             color: white;
-            padding: 20px;
+            padding: 1.5em;
             text-align: center;
-            font-size: 1.8em;
+            font-size: clamp(1.5em, 4vw, 2em);
             font-weight: bold;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(252,108,133,0.3);
         }
+
         nav {
-            background-color: #1f2a40;
+            background: linear-gradient(90deg, #1f2a40, #2d3e5f, #1f2a40);
             display: flex;
             justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.5em 0;
         }
+
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 1400px;
+            width: 100%;
+        }
+
         nav a {
             color: #fdf6f0;
-            padding: 15px 20px;
+            padding: 1em 1.2em;
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: clamp(0.75em, 2vw, 0.9em);
         }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #fc6c85;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
         nav a:hover {
-            background-color: #fc6c85;
+            color: #ff8fa1;
+            background: rgba(252,108,133,0.1);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            padding: 1em 1.5em;
+            color: #fdf6f0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            color: #ff8fa1;
+            transform: scale(1.05);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #fc6c85;
             color: white;
-            border-radius: 5px;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
+
         main {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(252,108,133,0.4);
+            max-width: 1400px;
+            margin: 2em auto;
+            padding: clamp(1em, 3vw, 2em);
         }
+
         h2 {
             color: #fc6c85;
             text-align: center;
+            font-size: clamp(1.8em, 4vw, 2.5em);
+            margin-bottom: 1em;
+            font-weight: 700;
         }
+
         .productos {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+            gap: clamp(1.5em, 3vw, 2em);
         }
+
         .producto {
-            border: 1px solid #fc6c85;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            transition: transform 0.3s;
-            background: #fff0f5;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
-        .producto img {
-            max-width: 100%;
-            border-radius: 8px;
-            height: 200px;
-            object-fit: cover;
-        }
+
         .producto:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(252,108,133,0.6);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(252,108,133,0.3);
         }
+
+        .producto img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .producto:hover img {
+            transform: scale(1.1);
+        }
+
+        .producto-info {
+            padding: 1.5em;
+        }
+
+        .producto-info h3 {
+            color: #1f2a40;
+            font-size: clamp(1.1em, 2.5vw, 1.3em);
+            margin-bottom: 0.5em;
+            font-weight: 700;
+        }
+
+        .producto-info p {
+            color: #666;
+            margin-bottom: 1em;
+            line-height: 1.5;
+            font-size: clamp(0.9em, 2vw, 1em);
+        }
+
+        .precio {
+            font-size: clamp(1.3em, 3vw, 1.5em);
+            color: #fc6c85;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+
+        .btn-agregar {
+            width: 100%;
+            padding: 1em;
+            background: linear-gradient(135deg, #fc6c85 0%, #ff8fa1 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: clamp(0.9em, 2vw, 1em);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(252,108,133,0.3);
+        }
+
+        .btn-agregar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(252,108,133,0.5);
+        }
+
         footer {
             text-align: center;
-            padding: 15px;
-            background-color: #1f2a40;
+            padding: clamp(1.5em, 3vw, 2em) 1em;
+            background: linear-gradient(135deg, #1f2a40 0%, #2d3e5f 100%);
             color: #fdf6f0;
-            margin-top: 40px;
+            margin-top: clamp(3em, 5vw, 4em);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .footer-creators {
+            margin-top: 1em;
+            font-style: italic;
+            color: #ff8fa1;
+            font-size: clamp(0.85em, 2vw, 0.95em);
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1em 2em;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8em;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .cart-icon {
+                width: 100%;
+                text-align: center;
+            }
+
+            .notification {
+                right: 50%;
+                transform: translateX(50%);
+                width: 90%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .productos {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>Accesorios Variados</header>
+    <header>🎀 Accesorios Variados</header>
+    
     <nav>
-        <a href="index.html">Inicio</a>
-        <a href="valores.html">Valores</a>
-        <a href="ropa_mujer.html">Ropa Mujer</a>
-        <a href="ropa_hombre.html">Ropa Hombre</a>
-        <a href="accesorios_hombre.html">Accesorios Hombre</a>
-        <a href="accesorios_varios.html">Accesorios Variados</a>
-        <a href="pago_envio.html">Pago y Envíos</a>
-    </nav>
-    <main>
-        <h2>Selección de Accesorios Variados</h2>
-        <div class="productos">
-            <div class="producto">
-                <img src="imagenes/imagenes\Accesorios Bariados\Bufanda.jpg" alt="Bufanda" />
-                <p>Bufanda</p>
-            </div>
-            <div class="producto">
-                <img src="imagenes/imagenes\Accesorios Bariados\Sombrero.jpg" alt="Sombrero" />
-                <p>Sombrero</p>
-            </div>
-            <div class="producto">
-                <img src="imagenes/imagenes\Accesorios Bariados\Guantes.jpg" alt="Guantes" />
-                <p>Guantes</p>
-            </div>
-            <div class="producto">
-                <img src="imagenes/imagenes\Accesorios Bariados\Pulsera.jpg" alt="Pulsera" />
-                <p>Pulsera</p>
+        <div class="nav-container">
+            <a href="index.html">Inicio</a>
+            <a href="valores.html">Valores</a>
+            <a href="ropa_mujer.html">Ropa Mujer</a>
+            <a href="ropa_hombre.html">Ropa Hombre</a>
+            <a href="accesorios_hombre.html">Accesorios Hombre</a>
+            <a href="accesorios_varios.html">Accesorios Variados</a>
+            <a href="pago_envio.html">Pago y Envíos</a>
+            <div class="cart-icon" onclick="window.location.href='carrito.html'">
+                🛒 Carrito
+                <span class="cart-count" id="cartCount">0</span>
             </div>
         </div>
+    </nav>
+
+    <main>
+        <h2>Selección de Accesorios Variados</h2>
+        <div class="productos" id="productosContainer"></div>
     </main>
+
     <footer>
-        &copy; 2025 Tienda En Línea. Todos los derechos reservados.
+        © 2025 Tienda En Línea. Todos los derechos reservados.
+        <div class="footer-creators">
+            Creado por: Uziel Alejandro Hernandez Gonzalez y Juan Luis Reyes Marquez
+        </div>
     </footer>
+
+    <div class="notification" id="notification">✅ ¡Producto agregado al carrito!</div>
+
+    <script>
+        const productos = [
+            { id: 301, nombre: "Bufanda", descripcion: "Bufanda abrigadora para clima frío", precio: 299, img: "imagenes/imagenes\\Accesorios Bariados\\Bufanda.jpg" },
+            { id: 302, nombre: "Sombrero", descripcion: "Sombrero casual ideal para el sol", precio: 349, img: "imagenes/imagenes\\Accesorios Bariados\\Sombrero.jpg" },
+            { id: 303, nombre: "Guantes", descripcion: "Guantes cómodos para invierno", precio: 259, img: "imagenes/imagenes\\Accesorios Bariados\\Guantes.jpg" },
+            { id: 304, nombre: "Pulsera", descripcion: "Pulsera moderna de accesorios variados", precio: 199, img: "imagenes/imagenes\\Accesorios Bariados\\Pulsera.jpg" }
+        ];
+
+        function renderProductos() {
+            const container = document.getElementById('productosContainer');
+            container.innerHTML = productos.map(p => `
+                <div class="producto">
+                    <img src="${p.img}" alt="${p.nombre}">
+                    <div class="producto-info">
+                        <h3>${p.nombre}</h3>
+                        <p>${p.descripcion}</p>
+                        <div class="precio">$${p.precio.toFixed(2)} MXN</div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(${p.id})">
+                            Agregar al Carrito 🛒
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function agregarAlCarrito(id) {
+            const producto = productos.find(p => p.id === id);
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...producto, quantity: 1 });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function showNotification() {
+            const notif = document.getElementById('notification');
+            notif.style.display = 'block';
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 2000);
+        }
+
+        renderProductos();
+        updateCartCount();
+        setInterval(updateCartCount, 1000);
+    </script>
 </body>
 </html>
-
